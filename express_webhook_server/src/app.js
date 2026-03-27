@@ -39,7 +39,12 @@ app.use('/docs', swaggerUi.serve, (req, res, next) => {
 });
 
 // Parse JSON request body
-app.use(express.json());
+// Capture raw body for webhook signature verification.
+app.use(express.json({
+  verify: (req, res, buf) => {
+    req.rawBody = buf;
+  }
+}));
 
 // Mount routes
 app.use('/', routes);
